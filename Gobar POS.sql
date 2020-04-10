@@ -21,14 +21,14 @@ CREATE TABLE "item_stock" (
   "item_id" int NOT NULL,
   "type" text NOT NULL,
   "qty" int NOT NULL,
-  "date" datetime NOT NULL
+  "date" TIMESTAMP NOT NULL
 );
 
 CREATE TABLE "pos_transaction" (
   "id" int PRIMARY KEY,
   "transaction_code" varchar NOT NULL,
   "consumer_name" varchar NOT NULL,
-  "date" datetime,
+  "date" TIMESTAMP,
   "total" int NOT NULL,
   "disc" int NOT NULL,
   "tax" int NOT NULL,
@@ -48,12 +48,12 @@ CREATE TABLE "pos_transaction_dt" (
   "is_trash" int NOT NULL
 );
 
-ALTER TABLE "item" ADD FOREIGN KEY ("id") REFERENCES "item_price" ("item_id");
+ALTER TABLE "item_stock" ADD FOREIGN KEY ("item_id") REFERENCES "item" ("id");
 
-ALTER TABLE "item" ADD FOREIGN KEY ("id") REFERENCES "item_stock" ("item_id");
+ALTER TABLE "item_price" ADD FOREIGN KEY ("item_id") REFERENCES "item" ("id");
+
+ALTER TABLE "pos_transaction_dt" ADD FOREIGN KEY ("item_id") REFERENCES "item" ("id");
+
+ALTER TABLE "pos_transaction_dt" ADD FOREIGN KEY ("price_id") REFERENCES "item_price" ("id");
 
 ALTER TABLE "pos_transaction_dt" ADD FOREIGN KEY ("transaction_id") REFERENCES "pos_transaction" ("id");
-
-ALTER TABLE "item" ADD FOREIGN KEY ("id") REFERENCES "pos_transaction_dt" ("item_id");
-
-ALTER TABLE "item_price" ADD FOREIGN KEY ("id") REFERENCES "pos_transaction_dt" ("price_id");
